@@ -67,6 +67,7 @@ keyword = sys.argv[1]
 keywrds = keyword.split(',')
 if (len(keywrds) > 1):
 	print("[+] Please use a different tool..")
+	exit(0)
 
 wordlist = []
 keyword = keyword.replace(" ", "")
