@@ -1,6 +1,11 @@
 import sys
 import os
 from time import sleep
+
+# Making sure Python can find the other files
+src_path = os.getcwd() + '/src'
+sys.path.insert(0, src_path)
+
 from wordlist_manipulation import *
 
 class bcolors:
@@ -39,7 +44,7 @@ printBanner()
 
 def printHelp():
 	# Prints out the help info
-	print(signs.HELP + " Usage : python {} ".format(colorWord(sys.argv[0], 0))+ "<" + colorWord("keyword", 0)+ "> (" + colorWord("--simple", 0) + "/" + colorWord("--normal", 0) + "/" + colorWord("--advanced", 0) + ")") 
+	print(signs.HELP + " Usage : python {} ".format(colorWord(sys.argv[0], 0))+ "<" + colorWord("keyword", 0)+ "> " + colorWord("--simple", 0) + "/" + colorWord("--normal", 0) + "/" + colorWord("--advanced", 0) ) 
 
 def simple(wordlist, keyword):
 	wordlist = addSpecialChars(wordlist, keyword)
