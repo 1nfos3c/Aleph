@@ -24,17 +24,20 @@ def colorWord(word, color):
 	return Colors[color] + word + default_color
 
 def capitalizeWord(wordlist):
-	# Makes all possible combinations of uppercase and lowercase letters.
+	# Makes interesting combinations of uppercase and lowercase letters.
 	for w in range(0, len(wordlist)):
+
+		# TODO
+		# make first and last LETTER capitalized
+		
+		# First letter and last letter
 		for x in range(0, len(wordlist[w])):
+			# One Capital for each position
 			tmp = wordlist[w][0:x] + wordlist[w][x].upper() + wordlist[w][x + 1 :]
-			tmp2 = wordlist[w][0:x].upper() + wordlist[w][x] + wordlist[w][x + 1 :].upper()
 			wordlist.append(tmp)
-			wordlist.append(tmp2)
+			
 		# Capitalize entire word
 		wordlist.append(wordlist[w].upper())
-	#casting to a set removes duplicates
-	wordlist = list(set(wordlist))
 	return wordlist
 
 def addZeroToTen(wordlist, keyword):
@@ -49,7 +52,7 @@ def addSpecialChars(wordlist, keyword):
 	wordlist = addZeroToTen(wordlist, keyword)
 	dynamicPrint(signs.PLUS + " Adding special characters.")
 	suffixes = "_","!","?","#"
-	prefixes =  "~","@","_"
+	prefixes =  "!","@","_","~"
 	numPrevix = len(prefixes)
 	numSuffix = len(suffixes)
 	minmax = numPrevix, numSuffix
@@ -60,11 +63,11 @@ def addSpecialChars(wordlist, keyword):
 		for k in range(0, numPrevix):
 			wordlist.append(prefixes[k] + wordlist[x])
 		for h in range(0, minim):
-			wordlist.append(prefixes[h] + wordlist[x] + suffixes[h])		
+			wordlist.append(prefixes[h] + wordlist[x] + suffixes[h])	
 	return wordlist
 
 def capitalizeList(keylist):
-	# Makes all possible combinations of uppercase and lowercase from the keyword.
+	# Makes interesting combinations of uppercase and lowercase from the keyword.
 	# Returns new list of keywords
 	base = keylist[0].lower()
 	keylist.append(base)
@@ -77,10 +80,10 @@ def capitalizeList(keylist):
 	return keylist
 
 def appendNumbers(wordlist):
-	# Appends numbers 0->210 after keyword
+	# Appends numbers 0->200 after keyword
 	dynamicPrint(signs.PLUS + " Adding numbers.")
 	for x in range(0, len(wordlist)):
-		for i in range(0, 210):
+		for i in range(0, 200):
 			wordlist.append(wordlist[x] + str(i))
 	return wordlist
 
