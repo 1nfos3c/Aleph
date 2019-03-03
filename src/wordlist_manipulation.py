@@ -79,11 +79,12 @@ def capitalizeList(keylist):
 	keylist.append(base.upper())
 	return keylist
 
-def appendNumbers(wordlist):
-	# Appends numbers 0->200 after keyword
+def appendNumbers(wordlist, maxnum):
+	# Appends numbers 0->range after keyword
+	# Todo : Dont just add numbers, add DDMMYY and YYYY
 	dynamicPrint(signs.PLUS + " Adding numbers.")
 	for x in range(0, len(wordlist)):
-		for i in range(0, 200):
+		for i in range(0, maxnum):
 			wordlist.append(wordlist[x] + str(i))
 	return wordlist
 

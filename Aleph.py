@@ -46,30 +46,18 @@ def printHelp():
 	# Prints out the help info
 	print(signs.HELP + " Usage : python {} ".format(colorWord(sys.argv[0], 0))+ "<" + colorWord("keyword", 0)+ "> " + colorWord("--simple", 0) + "/" + colorWord("--normal", 0) + "/" + colorWord("--advanced", 0) ) 
 
-def simple(wordlist, keyword):
+
+def createWordlist(wordlist, keyword, mode):
+	# Creates the wordlist
+	number_lengths = {"simple" : 10, "normal" : 75, "advanced": 200}
 	wordlist = addSpecialChars(wordlist, keyword)
 	wordlist = capitalizeWord(wordlist)
+	wordlist = appendNumbers(wordlist, number_lengths[mode])
 	wordlist = wordCloner(wordlist, keyword)
+	if not (mode == "simple" or mode == "normal"):
+		wordlist = leetify(wordlist)
 	wordlist = sortOnLength(wordlist)
-	writeWordlist(wordlist, "simple")
-
-
-def normal(wordlist, keyword):
-	wordlist = addSpecialChars(wordlist, keyword)
-	wordlist = capitalizeWord(wordlist)
-	wordlist = appendNumbers(wordlist)
-	wordlist = wordCloner(wordlist,keyword)
-	wordlist = sortOnLength(wordlist)
-	writeWordlist(wordlist, "normal")
-
-def advanced(wordlist, keyword):
-	wordlist = addSpecialChars(wordlist, keyword)
-	wordlist = capitalizeWord(wordlist)
-	wordlist = appendNumbers(wordlist)
-	wordlist = wordCloner(wordlist, keyword)
-	wordlist = leetify(wordlist)
-	wordlist = sortOnLength(wordlist)
-	writeWordlist(wordlist,"advanced")
+	writeWordlist(wordlist, mode)
 
 if (len(sys.argv) < 3):
 	printHelp()
@@ -79,14 +67,16 @@ keyword = sys.argv[1]
 keywrds = keyword.split(',')
 if (len(keywrds) > 1):
 	print("[+] Please use a different tool..")
+
 wordlist = []
 keyword = keyword.replace(" ", "")
 print( signs.INFO +" Keyword : " + "{}".format(colorWord(keyword,0)))
+
 if (sys.argv[2] == '--simple'):
-	simple(wordlist, keyword)
+	createWordlist(wordlist, keyword, "simple")
 elif (sys.argv[2] == '--normal'):
-	normal(wordlist, keyword)
+	createWordlist(wordlist, keyword, "normal")
 elif (sys.argv[2] == '--advanced'):
-	advanced(wordlist, keyword)
+	createWordlist(wordlist, keyword, "advanced")
 else:
 	printHelp()
