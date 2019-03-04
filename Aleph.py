@@ -2,12 +2,11 @@
 #-*- coding: utf-8 -*-
 import sys
 import os
-from time import sleep
 
 # Making sure Python can find the other files
 src_path = os.getcwd() + '/src' # Path = Current Directory/src
 sys.path.insert(0, src_path)
-
+from web_list_generator import *
 from wordlist_manipulation import * # Import code from src/wordlist_manipulation.py
 
 def colorWord(word, color):
@@ -16,9 +15,9 @@ def colorWord(word, color):
 	return Colors[color] + word + default_color
 
 def printBanner():
-	banner = bcolors.HEADER + """   __    __    ____  ____  _   _ 
+	banner = bcolors.HEADER + """   __    __    ____  ____  _   _
   /__\  (  )  ( ___)(  _ \( )_( )
- /(__)\  )(__  )__)  )___/ ) _ ( 
+ /(__)\  )(__  )__)  )___/ ) _ (
 (__)(__)(____)(____)(__)  (_) (_)
 """
 	print(banner)
@@ -28,7 +27,7 @@ printBanner()
 
 def printHelp():
 	# Prints out the help info
-	print(signs.HELP + " Usage : python {} ".format(colorWord(sys.argv[0], 0))+ "<" + colorWord("keyword", 0)+ "> " + colorWord("--simple", 0) + "/" + colorWord("--normal", 0) + "/" + colorWord("--advanced", 0) ) 
+	print(signs.HELP + " Usage : python {} ".format(colorWord(sys.argv[0], 0))+ "<" + colorWord("keyword", 0)+ "> " + colorWord("--simple", 0) + "/" + colorWord("--normal", 0) + "/" + colorWord("--advanced", 0) )
   # [h] Usage : python Aleph.py <keyword> --simple/--normal/--advanced
 
 def createWordlist(wordlist, keyword, mode):
@@ -57,11 +56,27 @@ wordlist = []
 keyword = keyword.replace(" ", "")
 print( signs.INFO +" Keyword : " + "{}".format(colorWord(keyword,0))) # [i] Keyword : {keyword}
 
-if (sys.argv[2] == '--simple'):
-	createWordlist(wordlist, keyword, "simple")
-elif (sys.argv[2] == '--normal'):
-	createWordlist(wordlist, keyword, "normal")
-elif (sys.argv[2] == '--advanced'):
-	createWordlist(wordlist, keyword, "advanced")
+isurl = re.search(r'https?://', keyword)
+if (isurl is not None):
+	if (sys.argv[2] == '--simple'):
+		generator = WebListGenerator(sys.argv[1], 33, 5, 12)
+		list = generator.GetList()
+		writeWordlist(list, "simple")
+	elif (sys.argv[2] == '--normal'):
+		generator = WebListGenerator(sys.argv[1], 66, 5, 12)
+		list = generator.GetList()
+		writeWordlist(list, "normal")
+	elif (sys.argv[2] == '--advanced'):
+		generator = WebListGenerator(sys.argv[1], 100, 5, 12)
+		list = generator.GetList()
+		writeWordlist(list, "advanced")
+
+elif (isurl is None):
+		if (sys.argv[2] == '--simple'):
+			createWordlist(wordlist, keyword, "simple")
+		elif (sys.argv[2] == '--normal'):
+			createWordlist(wordlist, keyword, "normal")
+		elif (sys.argv[2] == '--advanced'):
+			createWordlist(wordlist, keyword, "advanced")
 else:
 	printHelp()
