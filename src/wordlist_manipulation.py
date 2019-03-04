@@ -1,23 +1,36 @@
+#!usr/bin/python
+#-*- coding: utf-8 -*-
 from standard_functions import *
 import re
 
 #Class for printing in terminal with colors
 class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
+    HEADER =    '\033[95m'
+    OKBLUE =    '\033[94m'
+    OKGREEN =   '\033[92m'
+    WARNING =   '\033[93m'
+    FAIL =      '\033[91m'
+    ENDC =      '\033[0m'
+    BOLD =      '\033[1m'
     UNDERLINE = '\033[4m'
 
-Colors = [bcolors.HEADER,bcolors.OKBLUE,bcolors.OKGREEN,bcolors.WARNING,bcolors.FAIL,bcolors.ENDC,bcolors.BOLD,bcolors.UNDERLINE]
+Colors = [
+	bcolors.HEADER,    # \033[95m
+	bcolors.OKBLUE,    # \033[94m
+	bcolors.OKGREEN,   # \033[92m
+	bcolors.WARNING,   # \033[93m
+	bcolors.FAIL,      # \033[91m
+	bcolors.ENDC,      # \033[0m
+	bcolors.BOLD,      # \033[1m
+	bcolors.UNDERLINE, # \033[4m
+	]
 
 class signs:
-	PLUS = bcolors.OKBLUE + "[" + bcolors.HEADER + "+" + bcolors.OKBLUE + "]"
-	STAR = bcolors.OKBLUE + "[" + bcolors.HEADER + "*" + bcolors.OKBLUE + "]"
-
+	PLUS = bcolors.OKBLUE + "[" + bcolors.HEADER + "+" + bcolors.OKBLUE + "]" # [+]
+	STAR = bcolors.OKBLUE + "[" + bcolors.HEADER + "*" + bcolors.OKBLUE + "]" # [*]
+	HELP = bcolors.OKBLUE + "[" + bcolors.HEADER + "h" + bcolors.OKBLUE + "]" # [h]
+	INFO = bcolors.OKBLUE + "[" + bcolors.HEADER + "i" + bcolors.OKBLUE + "]" # [i]
+	
 def colorWord(word, color):
 	# Gives a word a nice color!
 	default_color = bcolors.OKBLUE
