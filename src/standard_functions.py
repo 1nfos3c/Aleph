@@ -25,11 +25,11 @@ class StandardFunc:
         # Makes a directory
         os.system("mkdir {}".format(""))
 
-    def readFile():
+    def readConfigFile():
         #Read config file
-        #Return contents as a string
-        contents = []
+        #Return configuration as a dict
+        configuration = {}
         with open("src/config") as file:
             for line in file:
-                contents.append(line.strip("\n").strip("prefixes=").strip("suffixes=").strip("max_spider_results="))
-        return contents
+                configuration[line.strip("\n").split(" ")[0].strip(":")] = line.strip("\n").split(" ")[1]
+        return configuration

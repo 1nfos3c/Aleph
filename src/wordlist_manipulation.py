@@ -44,6 +44,7 @@ class WordlistManipulator:
         # Variable for storing the raw keywords
         # These are usefull for manipulation methods that don't need to manipulate
         # the entire wordlist, but work based on keywords (like wordCloner).
+        self.configuration = StandardFunc.readConfigFile()
         self.keywords = keywords
         if (len(keywords) > 1):
             print("\n")
@@ -135,7 +136,8 @@ class WordlistManipulator:
         # Adds special characters to the end and beginning of supplied keywords.
         # Coffee -> Coffee_ & ~Coffee & @Coffee!
         StandardFunc.dynamicPrint(signs.PLUS + " Adding special characters.")
-        suffixes, prefixes = StandardFunc.readFile()[:2]
+        suffixes = self.configuration['suffixes']
+        prefixes = self.configuration['prefixes']
         numPrevix = len(prefixes)
         numSuffix = len(suffixes)
         minmax = numPrevix, numSuffix
