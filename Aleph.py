@@ -30,29 +30,15 @@ def printHelp():
 	print(signs.HELP + " Usage : python {} ".format(colorWord(sys.argv[0], 0))+ "<" + colorWord("keyword", 0)+ "> " + colorWord("--simple", 0) + "/" + colorWord("--normal", 0) + "/" + colorWord("--advanced", 0) )
   # [h] Usage : python Aleph.py <keyword> --simple/--normal/--advanced
 
-def createWordlist(wordlist, mode):
+def createWordlist(manipulator, mode):
 	# Creates the wordlist
-	number_lengths = {"simple" : 10, "normal" : 75, "advanced": 200} # Maximum number of words
-	wordlist = addSpecialChars(wordlist, affixes="src/affixes")
-	wordlist = capitalizeWord(wordlist)
-	wordlist = appendNumbers(wordlist, number_lengths[mode])
-	wordlist = wordCloner(wordlist)
-	if not (mode == "simple" or mode == "normal"): # If mode is advanced
-		wordlist = leetify(wordlist)
-	wordlist = sortOnLength(wordlist)
-	writeWordlist(wordlist, mode)
+	if (mode == "simple"):
+		manipulator.simpleManipulation()
+	elif (mode == "normal"):
+		manipulator.normalManipulation()
+	elif (mode == "advanced"):
+		manipulator.advancedManipulation()
 
-def editAndWriteWordlist(wordlist, mode):
-	# Creates the wordlist
-	number_lengths = {"simple" : 10, "normal" : 75, "advanced": 200} # Maximum number of words
-	wordlist = addSpecialChars(wordlist, affixes="src/affixes")
-	wordlist = capitalizeWord(wordlist)
-	wordlist = appendNumbers(wordlist, number_lengths[mode])
-	wordlist = wordCloner(wordlist)
-	if not (mode == "simple" or mode == "normal"): # If mode is advanced
-		wordlist = leetify(wordlist)
-	wordlist = sortOnLength(wordlist)
-	writeWordlist(wordlist, mode)
 
 if (len(sys.argv) < 3): # 2 Arguments required, word/url and mode (script name treated as argument 0)
 	printHelp()
@@ -68,25 +54,34 @@ wordlist = []
 keyword = keyword.replace(" ", "")
 print( signs.INFO +" Keyword : " + "{}".format(colorWord(keyword,0))) # [i] Keyword : {keyword}
 
-isurl = re.search(r'https?://', keyword)
+isurl = re.search(r'https?://', keyword) # Checking if user input is a URL
 if (isurl is not None):
+	# If it indeed is a URL the WebListGenerator will spider for keywords which
+	# are then manipulated by the WordlistManipulator.
 	if (sys.argv[2] == '--simple'):
 		generator = WebListGenerator(sys.argv[1], 33, 5, 12)
-		list = generator.GetList()
-		editAndWriteWordlist(generator.GetList(), "simple")
+		manipulator = WordlistManipulator(generator.GetList(), True)
+		createWordlist(manipulator, "simple")
 	elif (sys.argv[2] == '--normal'):
 		generator = WebListGenerator(sys.argv[1], 66, 5, 12)
-		editAndWriteWordlist(generator.GetList(), "normal")
+		manipulator = WordlistManipulator(generator.GetList(), True)
+		createWordlist(manipulator, "normal")
 	elif (sys.argv[2] == '--advanced'):
 		generator = WebListGenerator(sys.argv[1], 100, 5, 12)
-		editAndWriteWordlist(generator.GetList(), "advanced")
+		manipulator = WordlistManipulator(generator.GetList(), True)
+		createWordlist(manipulator, "advanced")
 
 elif (isurl is None):
-		if (sys.argv[2] == '--simple'):
-			createWordlist(wordlist, keyword, "simple")
-		elif (sys.argv[2] == '--normal'):
-			createWordlist(wordlist, keyword, "normal")
-		elif (sys.argv[2] == '--advanced'):
-			createWordlist(wordlist, keyword, "advanced")
+	# If it's just a regular keyword
+	wordlist.append(keyword)
+	manipulator = WordlistManipulator(wordlist, False)
+
+	if (sys.argv[2] == '--simple'):
+		createWordlist(manipulator, "simple")
+	elif (sys.argv[2] == '--normal'):
+		createWordlist(manipulator, "normal")
+	elif (sys.argv[2] == '--advanced'):
+		createWordlist(manipulator, "advanced")
+
 else:
 	printHelp()
