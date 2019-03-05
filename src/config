@@ -1,2 +1,3 @@
 suffixes=_!?#
 prefixes=!@_~
+max_spider_results=8
