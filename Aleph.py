@@ -30,25 +30,37 @@ def printHelp():
 	print(signs.HELP + " Usage : python {} ".format(colorWord(sys.argv[0], 0))+ "<" + colorWord("keyword", 0)+ "> " + colorWord("--simple", 0) + "/" + colorWord("--normal", 0) + "/" + colorWord("--advanced", 0) )
   # [h] Usage : python Aleph.py <keyword> --simple/--normal/--advanced
 
-def createWordlist(wordlist, keyword, mode):
+def createWordlist(wordlist, mode):
 	# Creates the wordlist
 	number_lengths = {"simple" : 10, "normal" : 75, "advanced": 200} # Maximum number of words
-	wordlist = addSpecialChars(wordlist, keyword, affixes="src/affixes")
+	wordlist = addSpecialChars(wordlist, affixes="src/affixes")
 	wordlist = capitalizeWord(wordlist)
 	wordlist = appendNumbers(wordlist, number_lengths[mode])
-	wordlist = wordCloner(wordlist, keyword)
+	wordlist = wordCloner(wordlist)
 	if not (mode == "simple" or mode == "normal"): # If mode is advanced
 		wordlist = leetify(wordlist)
 	wordlist = sortOnLength(wordlist)
 	writeWordlist(wordlist, mode)
 
-if (len(sys.argv) < 3): # 2 Arguments required, word and mode (script name treated as argument 0)
+def editAndWriteWordlist(wordlist, mode):
+	# Creates the wordlist
+	number_lengths = {"simple" : 10, "normal" : 75, "advanced": 200} # Maximum number of words
+	wordlist = addSpecialChars(wordlist, affixes="src/affixes")
+	wordlist = capitalizeWord(wordlist)
+	wordlist = appendNumbers(wordlist, number_lengths[mode])
+	wordlist = wordCloner(wordlist)
+	if not (mode == "simple" or mode == "normal"): # If mode is advanced
+		wordlist = leetify(wordlist)
+	wordlist = sortOnLength(wordlist)
+	writeWordlist(wordlist, mode)
+
+if (len(sys.argv) < 3): # 2 Arguments required, word/url and mode (script name treated as argument 0)
 	printHelp()
 	exit(0)
 
 keyword = sys.argv[1]
 keywrds = keyword.split(',')
-if (len(keywrds) > 1): # Only one word currently supported
+if (len(keywrds) > 1): # This tool isn't meant for multiple keywords.
 	print("[+] Please use a different tool..")
 	exit(0)
 
@@ -61,15 +73,13 @@ if (isurl is not None):
 	if (sys.argv[2] == '--simple'):
 		generator = WebListGenerator(sys.argv[1], 33, 5, 12)
 		list = generator.GetList()
-		writeWordlist(list, "simple")
+		editAndWriteWordlist(generator.GetList(), "simple")
 	elif (sys.argv[2] == '--normal'):
 		generator = WebListGenerator(sys.argv[1], 66, 5, 12)
-		list = generator.GetList()
-		writeWordlist(list, "normal")
+		editAndWriteWordlist(generator.GetList(), "normal")
 	elif (sys.argv[2] == '--advanced'):
 		generator = WebListGenerator(sys.argv[1], 100, 5, 12)
-		list = generator.GetList()
-		writeWordlist(list, "advanced")
+		editAndWriteWordlist(generator.GetList(), "advanced")
 
 elif (isurl is None):
 		if (sys.argv[2] == '--simple'):

@@ -53,18 +53,17 @@ def capitalizeWord(wordlist):
 		wordlist.append(wordlist[w].upper())
 	return wordlist
 
-def addZeroToTen(wordlist, keyword):
-	StandardFunc.dynamicPrint(signs.PLUS + " Adding zero to ten.")
-	wordlist.append(keyword)
-	for i in range(0,10):
-		wordlist.append(keyword + str(i))
-	return wordlist
+def addZeroToTen(wordlist):
+    StandardFunc.dynamicPrint(signs.PLUS + " Adding zero to ten.")
+    for x in range(0,len(wordlist)):
+    	for i in range(0,10):
+    		wordlist.append(wordlist[x] + str(i))
+    return wordlist
 
-def addSpecialChars(wordlist, keyword, affixes):
+def addSpecialChars(wordlist, affixes):
 	# Adds special characters to the end and beginning of supplied keywords.
-	wordlist = addZeroToTen(wordlist, keyword)
 	StandardFunc.dynamicPrint(signs.PLUS + " Adding special characters.")
-	suffixes, prefixes = readFile(affixes)[:2]
+	suffixes, prefixes = StandardFunc.readFile(affixes)[:2]
 	numPrevix = len(prefixes)
 	numSuffix = len(suffixes)
 	minmax = numPrevix, numSuffix
@@ -100,14 +99,15 @@ def appendNumbers(wordlist, maxnum):
 			wordlist.append(wordlist[x] + str(i))
 	return wordlist
 
-def wordCloner(wordlist, keyword):
+def wordCloner(wordlist):
 	# Duplicates the keyword only
+    # NEEDS TO CHANGE
 	StandardFunc.dynamicPrint(signs.PLUS + " Duplicating words.")
-	keylist = []
-	keylist.append(keyword)
-	keylist = capitalizeList(keylist)
-	for key in keylist:
-		wordlist.append(key + key)
+	#keylist = []
+	#keylist.append(keyword)
+	#keylist = capitalizeList(keylist)
+	#for key in keylist:
+		#wordlist.append(key + key)
 	return wordlist
 
 def leetify(wordlist):
