@@ -16,9 +16,9 @@ def colorWord(word, color):
 	return Colors[color] + word + default_color
 
 def printBanner():
-	banner = bcolors.HEADER + """   __    __    ____  ____  _   _ 
+	banner = bcolors.HEADER + """   __    __    ____  ____  _   _
   /__\  (  )  ( ___)(  _ \( )_( )
- /(__)\  )(__  )__)  )___/ ) _ ( 
+ /(__)\  )(__  )__)  )___/ ) _ (
 (__)(__)(____)(____)(__)  (_) (_)
 """
 	print(banner)
@@ -34,7 +34,7 @@ def printHelp():
 def createWordlist(wordlist, keyword, mode):
 	# Creates the wordlist
 	number_lengths = {"simple" : 10, "normal" : 75, "advanced": 200} # Maximum number of words
-	wordlist = addSpecialChars(wordlist, keyword)
+	wordlist = addSpecialChars(wordlist, keyword, affixes="src/affixes")
 	wordlist = capitalizeWord(wordlist)
 	wordlist = appendNumbers(wordlist, number_lengths[mode])
 	wordlist = wordCloner(wordlist, keyword)
