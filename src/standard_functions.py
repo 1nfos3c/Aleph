@@ -2,6 +2,7 @@ import sys
 import os
 
 ERASE_LINE = '\x1b[2K'
+
 class StandardFunc:
     def hasNumber(string):
         # Checks if there are numbers in the given string
@@ -16,7 +17,7 @@ class StandardFunc:
 
     def dynamicPrint(string):
         # Prints to the same Terminal line.
-    	clearLine()
+    	StandardFunc.clearLine()
     	sys.stdout.write("\r" + string)
     	sys.stdout.flush()
 

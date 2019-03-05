@@ -39,7 +39,7 @@ class WebListGenerator():
     def SearchWebpage(self, URLlist):
         #looks at urls in urllist and adds all found words to list
         wordlist = []
-        StandardFunc.dynamicPrint(signs.PLUS + "Found all links. Getting words from all webpages...")
+        StandardFunc.dynamicPrint(signs.PLUS + " Found all links. Getting words from all webpages...")
         for url in URLlist:
             try:
                 html = urllib.request.urlopen(url).read()
