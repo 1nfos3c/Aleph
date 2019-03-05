@@ -30,7 +30,7 @@ class signs:
 	STAR = bcolors.OKBLUE + "[" + bcolors.HEADER + "*" + bcolors.OKBLUE + "]" # [*]
 	HELP = bcolors.OKBLUE + "[" + bcolors.HEADER + "h" + bcolors.OKBLUE + "]" # [h]
 	INFO = bcolors.OKBLUE + "[" + bcolors.HEADER + "i" + bcolors.OKBLUE + "]" # [i]
-	
+
 def colorWord(word, color):
 	# Gives a word a nice color!
 	default_color = bcolors.OKBLUE
@@ -42,13 +42,13 @@ def capitalizeWord(wordlist):
 
 		# TODO
 		# make first and last LETTER capitalized
-		
+
 		# First letter and last letter
 		for x in range(0, len(wordlist[w])):
 			# One Capital for each position
 			tmp = wordlist[w][0:x] + wordlist[w][x].upper() + wordlist[w][x + 1 :]
 			wordlist.append(tmp)
-			
+
 		# Capitalize entire word
 		wordlist.append(wordlist[w].upper())
 	return wordlist
@@ -60,12 +60,11 @@ def addZeroToTen(wordlist, keyword):
 		wordlist.append(keyword + str(i))
 	return wordlist
 
-def addSpecialChars(wordlist, keyword):
+def addSpecialChars(wordlist, keyword, affixes):
 	# Adds special characters to the end and beginning of supplied keywords.
 	wordlist = addZeroToTen(wordlist, keyword)
 	dynamicPrint(signs.PLUS + " Adding special characters.")
-	suffixes = "_","!","?","#"
-	prefixes =  "!","@","_","~"
+	suffixes, prefixes = readFile(affixes)[:2]
 	numPrevix = len(prefixes)
 	numSuffix = len(suffixes)
 	minmax = numPrevix, numSuffix
@@ -76,7 +75,7 @@ def addSpecialChars(wordlist, keyword):
 		for k in range(0, numPrevix):
 			wordlist.append(prefixes[k] + wordlist[x])
 		for h in range(0, minim):
-			wordlist.append(prefixes[h] + wordlist[x] + suffixes[h])	
+			wordlist.append(prefixes[h] + wordlist[x] + suffixes[h])
 	return wordlist
 
 def capitalizeList(keylist):
@@ -117,7 +116,7 @@ def leetify(wordlist):
 		word = wordlist[x]
 		lowLeet = wordlist[x].replace("a","4").replace("e","3").replace("o","0").replace("i","1")
 		uppLeet = wordlist[x].replace("A","4").replace("E","3").replace("O","0").replace("I","1")
-		if not (lowLeet == word):				
+		if not (lowLeet == word):
 			wordlist.append(lowLeet)
 		if not (uppLeet == word):
 			wordlist.append(uppLeet)
