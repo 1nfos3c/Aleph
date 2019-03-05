@@ -10,4 +10,5 @@ When supplied with a URL, **Aleph** will scrape the webpage and links on that we
 You can also add custom affixes by adding them to ```src/affixes```.      
 Feel free to contribute!  
 
-**Aleph** works on both **Linux** and **OSX**.
+## Compatibility
+**Aleph** works with **Python3** on both **Linux** and **OSX**.
