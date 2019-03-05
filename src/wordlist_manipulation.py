@@ -62,10 +62,10 @@ class WordlistManipulator:
         # Called when simple mode is used
         wordlist = self.fillWordlist()
         wordlist = self.addSpecialChars(wordlist, "simple", affixes="src/affixes")
-        wordlist = self.capitalizeWord(wordlist)
-        wordlist = self.wordCloner(wordlist, "simple")
+        wordlist = self.capitalizeWordlist(wordlist)
         wordlist = self.appendYears(wordlist, "simple", self.number_lengths["simple"])
-        wordlist = self.leetify(wordlist, "simple")
+        #wordlist = self.leetify(wordlist, "simple")
+        wordlist = self.wordCloner(wordlist, "simple")
         wordlist = self.sortOnLength(wordlist)
         self.writeWordlist(wordlist, "simple")
 
@@ -73,10 +73,10 @@ class WordlistManipulator:
         # Called when normal mode is used
         wordlist = self.fillWordlist()
         wordlist = self.addSpecialChars(wordlist, "normal", affixes="src/affixes")
-        wordlist = self.capitalizeWord(wordlist)
-        wordlist = self.wordCloner(wordlist, "normal")
+        wordlist = self.capitalizeWordlist(wordlist)
         wordlist = self.leetify(wordlist, "normal")
         wordlist = self.appendYears(wordlist, "normal", self.number_lengths["normal"])
+        wordlist = self.wordCloner(wordlist, "normal")
         wordlist = self.sortOnLength(wordlist)
         self.writeWordlist(wordlist, "normal")
 
@@ -84,21 +84,23 @@ class WordlistManipulator:
         # Called when advanced mode is used
         wordlist = self.fillWordlist()
         wordlist = self.addSpecialChars(wordlist, "advanced", affixes="src/affixes")
-        wordlist = self.capitalizeWord(wordlist)
-        wordlist = self.wordCloner(wordlist, "advanced")
+        wordlist = self.capitalizeWordlist(wordlist)
         wordlist = self.leetify(wordlist, "advanced")
         wordlist = self.appendYears(wordlist, "advanced", self.number_lengths["advanced"])
+        wordlist = self.wordCloner(wordlist, "advanced")
         wordlist = self.sortOnLength(wordlist)
         self.writeWordlist(wordlist, "advanced")
 
-    def capitalizeWord(self, wordlist):
+    def capitalizeWordlist(self, wordlist):
         # Makes interesting combinations of uppercase and lowercase letters.
+        # coffee -> Coffee
         for w in range(0, len(wordlist)):
             # TODO
             # make first and last LETTER capitalized
 
             for x in range(0, len(wordlist[w])):
                 # Cycles trough the word capatalizing one letter at a time
+                # coffee -> Coffee -> cOffee -> coFfee
                 tmp = wordlist[w][0:x] + wordlist[w][x].upper() + wordlist[w][x + 1 :]
                 wordlist.append(tmp)
 
@@ -107,7 +109,10 @@ class WordlistManipulator:
         return wordlist
 
     def addZeroToTen(self, wordlist):
+        # Adds zero to ten to the keyword(s)
+        # Coffee -> Coffee7
         StandardFunc.dynamicPrint(signs.PLUS + " Adding zero to ten.")
+
         for x in range(0,len(wordlist)):
             for i in range(0,10):
                 wordlist.append(wordlist[x] + str(i))
@@ -115,6 +120,7 @@ class WordlistManipulator:
 
     def addSpecialChars(self, wordlist, mode, affixes):
         # Adds special characters to the end and beginning of supplied keywords.
+        # Coffee -> Coffee_ & ~Coffee & @Coffee!
         StandardFunc.dynamicPrint(signs.PLUS + " Adding special characters.")
         suffixes, prefixes = StandardFunc.readFile(affixes)[:2]
         numPrevix = len(prefixes)
@@ -124,9 +130,8 @@ class WordlistManipulator:
         for x in range(0,len(wordlist)):
             for j in range(0, numSuffix):
                 wordlist.append(wordlist[x] + suffixes[j])
-            if not (mode == "simple"):
-                for k in range(0, numPrevix):
-                    wordlist.append(prefixes[k] + wordlist[x])
+            for k in range(0, numPrevix):
+                wordlist.append(prefixes[k] + wordlist[x])
             if (mode == "advanced"):
                 for h in range(0, minim):
                     wordlist.append(prefixes[h] + wordlist[x] + suffixes[h])
@@ -138,17 +143,22 @@ class WordlistManipulator:
         StandardFunc.dynamicPrint(signs.PLUS + " Adding years.")
         year_min = self.cur_year - year_range
         if not (mode == "advanced"):
-            if (mode == "normal"):
-                # Also capitalize the first letter if its not already a capital
-                # and add the years.
-                for x in range(0, len(self.keywords)):
-                    if not (self.keywords[x].istitle()):
-                        keyword = self.keywords[x].capitalize()
-                        for i in range(year_min, self.cur_year):
-                            wordlist.append(keyword + str(i))
+            # Also capitalize the first letter if its not already a capital
+            # and add the years.
+
+            # We will need to avoid looping the words twice, but we do want
+            # to add a capitalized version when needed, watch and learn.
+            new_words_written = 0 # <--- !
             for x in range(0, len(self.keywords)):
+                if not (self.keywords[x].istitle()):
+                    keyword = self.keywords[x].capitalize()
+                    for i in range(year_min, self.cur_year):
+                        wordlist.append(keyword + str(i))
+                        new_words_written += 1 # <--- !!
+
+            for x in range(0, (len(wordlist) - new_words_written)): # <---- !!! whut?!
                 for i in range(year_min, self.cur_year):
-                    wordlist.append(self.keywords[x] + str(i))
+                    wordlist.append(wordlist[x] + str(i))
         else :
             # Add the years to every wordlist entry
             for x in range(0, len(wordlist)):
@@ -162,7 +172,9 @@ class WordlistManipulator:
             # Coffee -> CoffeeCoffee
             StandardFunc.dynamicPrint(signs.PLUS + " Duplicating words.")
             for x in range(0, len(self.keywords)):
-                wordlist.append(self.keywords[x] + self.keywords[x])
+                new_word = self.keywords[x] + self.keywords[x]
+                wordlist.append(new_word)
+                wordlist.append(new_word.upper())
         elif (mode == "normal" or mode == "advanced"):
             # Duplicates the keyword only if it has no numbers in it
             # Coffee -> CoffeeCoffee, CoFfEe -> CoFfEeCoFfEe
@@ -173,16 +185,17 @@ class WordlistManipulator:
         return wordlist
 
     def leetify(self, wordlist, mode):
+        # 'Leetifies' the all words in the wordlist.
+        # Coffee -> C0ff33
         StandardFunc.dynamicPrint(signs.PLUS + " L33t1fy1ng!")
         for x in range(0,len(wordlist)):
+            word = wordlist[x]
+            wordlist.append(word.replace("a","4").replace("e","3").replace("o","0").replace("i","1"))
+            upp_leet = word.replace("A","4").replace("E","3").replace("O","0").replace("I","1")
+            if not (upp_leet == word):
+                wordlist.append(upp_leet)
             if not (mode == "simple"):
-                word = wordlist[x]
-                wordlist.append(word.replace("a","4").replace("e","3").replace("o","0").replace("i","1"))
-                upp_leet = word.replace("A","4").replace("E","3").replace("O","0").replace("I","1")
-                if not (upp_leet == word):
-                    wordlist.append(upp_leet)
-            else:
-                wordlist.append(wordlist[x].replace("a","@").replace("o","0"))
+                wordlist.append(wordlist[x].replace("a","@").replace("o","0").replace("i","4").replace("e","3"))
 
         return wordlist
 
