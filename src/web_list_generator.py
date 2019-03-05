@@ -5,12 +5,12 @@ import urllib.request
 import re
 from standard_functions import *
 from wordlist_manipulation import *
+
 class WebListGenerator():
 
-    def __init__(self, url, completeness, minwordlength, maxwordlength):
+    def __init__(self, url, minwordlength, maxwordlength):
         #Simple webspider that creates a list of all unique words in a given webpage.
         self.url = url
-        self.completeness = completeness
         self.minwordlength = minwordlength
         self.maxwordlength = maxwordlength
         html = urllib.request.urlopen(self.url).read()
@@ -19,9 +19,13 @@ class WebListGenerator():
         subUrlList = self.FindSubUrls(soup)
         for url in subUrlList:
             self.URLlist.append(url)
-        rawList = self.SearchWebpage(self.URLlist)
-        uniqueList = self.CommonWebList(rawList, self.completeness)
-        self.cleanList = self.CleanWebList(uniqueList, self.minwordlength, self.maxwordlength)
+        weblist = self.create_weblist(self.URLlist)
+        normalized_list = self.normalize_words(weblist)
+        common_list = self.CommonWebList(normalized_list)
+        uniqueList = self.findUniqueWords(self.url)
+        for word in uniqueList:
+            common_list.append(word)
+        self.cleanList = self.CleanWebList(common_list, self.minwordlength, self.maxwordlength)
 
     def FindSubUrls(self, soup):
         #search given url for other links and adds them to sub-urlList
@@ -36,52 +40,74 @@ class WebListGenerator():
                     subUrls.append(link)
         return subUrls
 
-    def SearchWebpage(self, URLlist):
+    def read_web_page(self, url):
+        #returns a list of all words on a given webpage
+        html = urllib.request.urlopen(url).read()
+        soup = BeautifulSoup(html, features='lxml')
+        for script in soup(["script", "style"]):
+            script.extract()
+        text = soup.get_text()
+        lines = (line.strip() for line in text.splitlines())
+        chunks = (phrase.strip() for line in lines for phrase in line.split(" "))
+        text = '\n'.join(chunk for chunk in chunks if chunk)
+        wordlist = list(re.sub(r"([A-Z])", r"\n\1", text).split())
+        return wordlist
+
+    def create_weblist(self, URLlist):
         #looks at urls in urllist and adds all found words to list
         wordlist = []
-        StandardFunc.dynamicPrint(signs.PLUS + " Found all links. Getting words from all webpages...")
+        StandardFunc.dynamicPrint(signs.PLUS + " Found all links. Getting words from webpages. (This may take a while...)")
         for url in URLlist:
             try:
-                html = urllib.request.urlopen(url).read()
-                soup = BeautifulSoup(html, features='lxml')
-                for script in soup(["script", "style"]):
-                    script.extract()
-                text = soup.get_text()
-                lines = (line.strip() for line in text.splitlines())
-                chunks = (phrase.strip() for line in lines for phrase in line.split(" "))
-                text = '\n'.join(chunk for chunk in chunks if chunk)
-                allWords = list(re.sub(r"([A-Z])", r"\n\1", text).split())
+                allWords = self.read_web_page(url)
                 for word in allWords:
                     wordlist.append(word)
             except:
                 continue
         StandardFunc.dynamicPrint(signs.PLUS + " Found all words.")
-        self.NormalizeWords(wordlist)
         return wordlist
 
-    def CommonWebList(self, wordlist, completeness):
-        #returns common values from SearchWebAll, whereas completeness is a number between 1 - 100 that determines how much of the found words are returned
+
+    def findUniqueWords(self, url):
+        #returns a list of all unique (only appear one time) words in given webpage
+        wordlist = self.read_web_page(url)
         totallength = len(set(wordlist))
-        returnnbr = totallength * completeness / 100
         counter = Counter(wordlist)
-        counttuple = counter.most_common(int(returnnbr))
-        wordlist = [x[0] for x in counttuple]
-        return wordlist
+        counttuple = counter.most_common(totallength)
+        setlist = []
+        for x in counttuple:
+            if x[1] == 1:
+                setlist.append(x[0])
+        return setlist
+
+    def CommonWebList(self, wordlist):
+        #returns hierarchical common values from SearchWebAll\
+        totallength = len(set(wordlist))
+        counter = Counter(wordlist)
+        counttuple = counter.most_common(totallength)
+        sublist = []
+        for word in counttuple:
+            sublist.append(word[0])
+        return sublist
 
     def CleanWebList(self, wordlist, minwordlength, maxwordlength):
-        #takes a weblist and checks it on length
-        copylist = wordlist.copy() #needed for weird bug, otherwise list is not being iterated totally
+        #returns a list of words that match specified length
+        copylist = wordlist.copy()
         for word in copylist:
             if (word == '') or (len(word) < minwordlength) or (len(word) > maxwordlength):
                 wordlist.remove(word)
         StandardFunc.dynamicPrint(signs.PLUS + "Cleaned results.")
         return wordlist
 
-    def NormalizeWords(self, wordlist):
+    def normalize_words(self, wordlist):
         #Gets rid of all capital letters and weird characters.
         for x in range(len(wordlist)):
             wordlist[x] = wordlist[x].lower()
             wordlist[x] = re.sub(r'[^a-z]+', '', wordlist[x])
+        return wordlist
 
-    def GetList(self):
-        return self.cleanList
+    def GetList(self, weblist_length):
+        if len(self.cleanList) > weblist_length:
+            return self.cleanList[0:weblist_length]
+        else:
+            return self.cleanList
