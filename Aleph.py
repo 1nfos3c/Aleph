@@ -58,6 +58,7 @@ isurl = re.search(r'https?://', keyword) # Checking if user input is a URL
 if (isurl is not None):
 	# If it indeed is a URL the WebListGenerator will spider for keywords which
 	# are then manipulated by the WordlistManipulator.
+	max_results = StandardFunc.readFile()[2]
 	if (sys.argv[2] == '--simple'):
 		generator = WebListGenerator(sys.argv[1], 33, 5, 12)
 		manipulator = WordlistManipulator(generator.GetList(), True)

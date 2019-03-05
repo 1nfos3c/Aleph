@@ -61,7 +61,7 @@ class WordlistManipulator:
     def simpleManipulation(self):
         # Called when simple mode is used
         wordlist = self.fillWordlist()
-        wordlist = self.addSpecialChars(wordlist, "simple", affixes="src/affixes")
+        wordlist = self.addSpecialChars(wordlist, "simple")
         wordlist = self.capitalizeWordlist(wordlist)
         wordlist = self.appendYears(wordlist, "simple", self.number_lengths["simple"])
         #wordlist = self.leetify(wordlist, "simple")
@@ -72,7 +72,7 @@ class WordlistManipulator:
     def normalManipulation(self):
         # Called when normal mode is used
         wordlist = self.fillWordlist()
-        wordlist = self.addSpecialChars(wordlist, "normal", affixes="src/affixes")
+        wordlist = self.addSpecialChars(wordlist, "normal")
         wordlist = self.capitalizeWordlist(wordlist)
         wordlist = self.leetify(wordlist, "normal")
         wordlist = self.appendYears(wordlist, "normal", self.number_lengths["normal"])
@@ -83,7 +83,7 @@ class WordlistManipulator:
     def advancedManipulation(self):
         # Called when advanced mode is used
         wordlist = self.fillWordlist()
-        wordlist = self.addSpecialChars(wordlist, "advanced", affixes="src/affixes")
+        wordlist = self.addSpecialChars(wordlist, "advanced")
         wordlist = self.capitalizeWordlist(wordlist)
         wordlist = self.leetify(wordlist, "advanced")
         wordlist = self.appendYears(wordlist, "advanced", self.number_lengths["advanced"])
@@ -118,11 +118,11 @@ class WordlistManipulator:
                 wordlist.append(wordlist[x] + str(i))
         return wordlist
 
-    def addSpecialChars(self, wordlist, mode, affixes):
+    def addSpecialChars(self, wordlist, mode):
         # Adds special characters to the end and beginning of supplied keywords.
         # Coffee -> Coffee_ & ~Coffee & @Coffee!
         StandardFunc.dynamicPrint(signs.PLUS + " Adding special characters.")
-        suffixes, prefixes = StandardFunc.readFile(affixes)[:2]
+        suffixes, prefixes = StandardFunc.readFile()[:2]
         numPrevix = len(prefixes)
         numSuffix = len(suffixes)
         minmax = numPrevix, numSuffix
