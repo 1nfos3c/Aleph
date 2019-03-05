@@ -52,7 +52,6 @@ if (len(keywrds) > 1): # This tool isn't meant for multiple keywords.
 
 wordlist = []
 keyword = keyword.replace(" ", "")
-print( signs.INFO +" Keyword : " + "{}".format(colorWord(keyword,0))) # [i] Keyword : {keyword}
 
 isurl = re.search(r'https?://', keyword) # Checking if user input is a URL
 if (isurl is not None):

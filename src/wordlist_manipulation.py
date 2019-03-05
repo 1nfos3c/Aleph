@@ -45,6 +45,19 @@ class WordlistManipulator:
         # These are usefull for manipulation methods that don't need to manipulate
         # the entire wordlist, but work based on keywords (like wordCloner).
         self.keywords = keywords
+        if (len(keywords) > 1):
+            print("\n")
+        string = signs.INFO + " keyword(s) : "
+        num_keywords = len(keywords)
+
+        for x in range(0, num_keywords):
+            if (x == (num_keywords - 1)):
+                string = string + colorWord(self.keywords[x],0)
+            else:
+                string = string + colorWord(self.keywords[x],0) + ", "
+
+        print(string)
+
         self.used_url = is_url
         # Maximum number to be added to each keyword
         self.number_lengths = {"simple" : 100, "normal" : 150, "advanced": 200}
@@ -176,12 +189,12 @@ class WordlistManipulator:
                 wordlist.append(new_word)
                 wordlist.append(new_word.upper())
         elif (mode == "normal" or mode == "advanced"):
-            # Duplicates the keyword only if it has no numbers in it
+            # Duplicates the wordlist entry only if it has no numbers in it
             # Coffee -> CoffeeCoffee, CoFfEe -> CoFfEeCoFfEe
             StandardFunc.dynamicPrint(signs.PLUS + " Duplicating words.")
-            for x in range(0, len(self.keywords)):
-                if not StandardFunc.hasNumber(self.keywords[x]):
-                    wordlist.append(self.keywords[x] + self.keywords[x])
+            for x in range(0, len(wordlist)):
+                if not StandardFunc.hasNumber(wordlist[x]):
+                    wordlist.append(wordlist[x] + wordlist[x])
         return wordlist
 
     def leetify(self, wordlist, mode):
