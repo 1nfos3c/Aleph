@@ -46,8 +46,6 @@ class WordlistManipulator:
         # the entire wordlist, but work based on keywords (like wordCloner).
         self.configuration = StandardFunc.readConfigFile()
         self.keywords = keywords
-        if (len(keywords) > 1):
-            print("\n")
         string = signs.INFO + " keyword(s) : "
         num_keywords = len(keywords)
 
@@ -75,9 +73,9 @@ class WordlistManipulator:
     def simpleManipulation(self):
         # Called when simple mode is used
         wordlist = self.fillWordlist()
+        wordlist = self.addZeroToTen(wordlist)
         wordlist = self.addSpecialChars(wordlist, "simple")
         wordlist = self.capitalizeWordlist(wordlist)
-        wordlist = self.appendYears(wordlist, "simple", self.number_lengths["simple"])
         #wordlist = self.leetify(wordlist, "simple")
         wordlist = self.wordCloner(wordlist, "simple")
         wordlist = self.sortOnLength(wordlist)
