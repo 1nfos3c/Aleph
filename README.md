@@ -4,7 +4,7 @@ Hi! This is **Aleph**, a one word wordlist generator.
 
 ![Aleph](http://i67.tinypic.com/9kwgfs.png)
 
-## Compatibility
+### Compatibility
 **Aleph** works with **Python3** on both **Linux** and **OSX**.
 To install the required dependencies use:  
 ```pip3 install -r requirements.txt```
