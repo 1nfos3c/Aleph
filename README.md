@@ -15,8 +15,8 @@ Just give **Aleph** a single keyword or URL and a mode and it will create a word
 ### Modes  
 There are four modes to choose from:  
 ```--simple``` , ```--normal```, ```--advanced``` and ```--all``` .  
-The first three modes each create unique passwords and ```-all```  
-simply combines them all into one big wordlist.  
+The first three modes each create unique passwords and 
+```-all``` simply generates all of them.  
 
 ### Spider
 When supplied with a URL, **Aleph** will scrape the webpage and its links for unique words.  
