@@ -73,9 +73,9 @@ class WordlistManipulator:
     def simpleManipulation(self):
         # Called when simple mode is used
         wordlist = self.fillWordlist()
+        wordlist = self.addZeroToTen(wordlist)
         wordlist = self.addSpecialChars(wordlist, "simple")
         wordlist = self.capitalizeWordlist(wordlist)
-        wordlist = self.appendYears(wordlist, "simple", self.number_lengths["simple"])
         #wordlist = self.leetify(wordlist, "simple")
         wordlist = self.wordCloner(wordlist, "simple")
         wordlist = self.sortOnLength(wordlist)
