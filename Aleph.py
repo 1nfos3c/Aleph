@@ -60,16 +60,18 @@ if (isurl is not None):
 	# If it indeed is a URL the WebListGenerator will spider for keywords which
 	# are then manipulated by the WordlistManipulator.
 	max_results = int(configuration['max_spider_results'])
+	max_word_length = int(configuration['max_spider_word_length'])
+	min_word_length = int(configuration['min_spider_word_length'])
 	if (sys.argv[2] == '--simple'):
-		generator = WebListGenerator(sys.argv[1], 5, 12)
+		generator = WebListGenerator(sys.argv[1], min_word_length, max_word_length)
 		manipulator = WordlistManipulator(generator.GetList(max_results), True)
 		createWordlist(manipulator, "simple")
 	elif (sys.argv[2] == '--normal'):
-		generator = WebListGenerator(sys.argv[1], 5, 12)
+		generator = WebListGenerator(sys.argv[1], min_word_length, max_word_length)
 		manipulator = WordlistManipulator(generator.GetList(max_results), True)
 		createWordlist(manipulator, "normal")
 	elif (sys.argv[2] == '--advanced'):
-		generator = WebListGenerator(sys.argv[1], 5, 12)
+		generator = WebListGenerator(sys.argv[1], min_word_length, max_word_length)
 		manipulator = WordlistManipulator(generator.GetList(max_results), True)
 		createWordlist(manipulator, "advanced")
 	else:
