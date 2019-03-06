@@ -3,31 +3,33 @@ import os
 
 ERASE_LINE = '\x1b[2K'
 
-def hasNumber(string):
-    # Checks if there are numbers in the given string
-    # returns a boolean
-    return any(i.isdigit() for i in string)
+class StandardFunc:
+    def hasNumber(string):
+        # Checks if there are numbers in the given string
+        # returns a boolean
+        #this function is not used yet
+        return any(i.isdigit() for i in string)
 
-def clearLine():
-    # Clears the current Terminal line
-    sys.stdout.write(ERASE_LINE)
-    sys.stdout.flush()
+    def clearLine():
+        # Clears the current Terminal line
+        sys.stdout.write(ERASE_LINE)
+        sys.stdout.flush()
 
-def dynamicPrint(string):
-    # Prints to the same Terminal line.
-	clearLine()
-	sys.stdout.write("\r" + string)
-	sys.stdout.flush()
+    def dynamicPrint(string):
+        # Prints to the same Terminal line.
+        StandardFunc.clearLine()
+        sys.stdout.write("\r" + string)
+        sys.stdout.flush()
 
-def makeDir(dir):
-    # Makes a directory
-    os.system("mkdir {}".format(""))
+    def makeDir(dir):
+        # Makes a directory
+        os.system("mkdir {}".format(""))
 
-def readFile(filename):
-	#Read file
-	#Return contents as a string
-	contents = []
-	with open(filename) as file:
-		for line in file:
-			contents.append(line.strip("\n").strip("prefixes=").strip("suffixes="))
-	return contents
+    def readConfigFile():
+        #Read config file
+        #Return configuration as a dict
+        configuration = {}
+        with open("src/config") as file:
+            for line in file:
+                configuration[line.strip("\n").split(" ")[0].strip(":")] = line.strip("\n").split(" ")[1]
+        return configuration
