@@ -11,6 +11,7 @@ To install the required dependencies use:
 
 ### Usage
 Just give **Aleph** a single keyword or URL and a mode and it will create a wordlist based on that.   
+Specific configuration options can be edited in the config file located in ```src/```.
 
 ### Modes  
 There are four modes to choose from:  
