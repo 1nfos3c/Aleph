@@ -9,6 +9,7 @@ sys.path.insert(0, src_path)
 from web_list_generator import *
 from wordlist_manipulation import * # Import code from src/wordlist_manipulation.py
 from standard_functions import *
+from datamuse_generator import *
 
 def colorWord(word, color):
 	# Gives a word a nice color!
@@ -93,16 +94,22 @@ if (is_url is not None):
 	min_word_length = int(configuration['min_spider_word_length'])
 	strict_ssl = StandardFunc.readBool(configuration['strict_ssl'])
 	if (sys.argv[2] == '--simple'):
-		generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)
-		manipulator = WordlistManipulator(generator.GetList(max_results), True)
+		web_generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)
+		datamuse_generator = DatamuseGenerator(web_generator.GetList(max_results))
+		datamuse_list = datamuse_generator.find_similar_words("simple")
+		manipulator = WordlistManipulator(datamuse_list, True)
 		createWordlist(manipulator, "simple")
 	elif (sys.argv[2] == '--normal'):
-		generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)
-		manipulator = WordlistManipulator(generator.GetList(max_results), True)
+		web_generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)
+		datamuse_generator = DatamuseGenerator(web_generator.GetList(max_results))
+		datamuse_list = datamuse_generator.find_similar_words("normal")
+		manipulator = WordlistManipulator(datamuse_list, True)
 		createWordlist(manipulator, "normal")
 	elif (sys.argv[2] == '--advanced'):
-		generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)
-		manipulator = WordlistManipulator(generator.GetList(max_results), True)
+		web_generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)
+		datamuse_generator = DatamuseGenerator(web_generator.GetList(max_results))
+		datamuse_list = datamuse_generator.find_similar_words("advanced")
+		manipulator = WordlistManipulator(datamuse_list, True)
 		createWordlist(manipulator, "advanced")
 	elif (sys.argv[2] == '--all'):
 		generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)
