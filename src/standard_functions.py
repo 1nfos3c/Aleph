@@ -33,3 +33,11 @@ class StandardFunc:
             for line in file:
                 configuration[line.strip("\n").split(" ")[0].strip(":")] = line.strip("\n").split(" ")[1]
         return configuration
+
+    def readBool(string):
+        if string.lower() == 'true':
+            return True
+        elif string.lower() == 'false':
+            return False
+        else:
+            return True

@@ -69,16 +69,17 @@ if (is_url is not None):
 	max_results = int(configuration['max_spider_results'])
 	max_word_length = int(configuration['max_spider_word_length'])
 	min_word_length = int(configuration['min_spider_word_length'])
+	strict_ssl = StandardFunc.readBool(configuration['strict_ssl'])
 	if (sys.argv[2] == '--simple'):
-		generator = WebListGenerator(keyword, min_word_length, max_word_length)
+		generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)
 		manipulator = WordlistManipulator(generator.GetList(max_results), True)
 		createWordlist(manipulator, "simple")
 	elif (sys.argv[2] == '--normal'):
-		generator = WebListGenerator(keyword, min_word_length, max_word_length)
+		generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)
 		manipulator = WordlistManipulator(generator.GetList(max_results), True)
 		createWordlist(manipulator, "normal")
 	elif (sys.argv[2] == '--advanced'):
-		generator = WebListGenerator(keyword, min_word_length, max_word_length)
+		generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)
 		manipulator = WordlistManipulator(generator.GetList(max_results), True)
 		createWordlist(manipulator, "advanced")
 	else:
