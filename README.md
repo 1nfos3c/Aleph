@@ -21,3 +21,5 @@ simply combines them all into one big wordlist.
 ## Spider
 When supplied with a URL, **Aleph** will scrape the webpage and its links for unique words.  
 These words will then be used to search for similar words using Datamuse.  
+This list of keywords will then be used to create the wordlist.
+A website about coffee would for example create a wordlist with words like coffee, beans, cappucino etc.  
