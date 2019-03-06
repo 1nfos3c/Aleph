@@ -90,8 +90,8 @@ if (is_url is not None):
 	# If it indeed is a URL the WebListGenerator will spider for keywords which
 	# are then manipulated by the WordlistManipulator.
 	max_results = int(configuration['max_spider_results'])
-	max_word_length = int(configuration['max_spider_word_length'])
-	min_word_length = int(configuration['min_spider_word_length'])
+	max_word_length = int(configuration['max_generator_word_length'])
+	min_word_length = int(configuration['min_generator_word_length'])
 	strict_ssl = StandardFunc.readBool(configuration['strict_ssl'])
 	if (sys.argv[2] == '--simple'):
 		web_generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)

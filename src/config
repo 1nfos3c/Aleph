@@ -1,8 +1,8 @@
 suffixes: _!?#
 prefixes: !@_~
 max_spider_results: 8
-min_spider_word_length: 5
-max_spider_word_length: 15
+min_generator_word_length: 5
+max_generator_word_length: 15
 only_spider_subdomains: True
 strict_ssl: True
 simple_datamuse_max_results: 5
