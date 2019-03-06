@@ -112,8 +112,10 @@ if (is_url is not None):
 		manipulator = WordlistManipulator(datamuse_list, True)
 		createWordlist(manipulator, "advanced")
 	elif (sys.argv[2] == '--all'):
-		generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)
-		manipulator = WordlistManipulator(generator.GetList(max_results), True)
+		web_generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)
+		datamuse_generator = DatamuseGenerator(web_generator.GetList(max_results))
+		datamuse_list = datamuse_generator.find_similar_words("advanced")
+		manipulator = WordlistManipulator(datamuse_list, True)
 		createWordlist(manipulator, "all")
 	else:
 		printHelp()

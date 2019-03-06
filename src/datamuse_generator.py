@@ -19,7 +19,7 @@ class DatamuseGenerator:
         if mode == "advanced":
             return_nr = int(configuration['advanced_datamuse_max_results'])
         for word in self.wordlist:
-            StandardFunc.dynamicPrint(signs.INFO + " Found words on weppages. Creating similar words for: " + colorWord(str(word),0))
+            StandardFunc.dynamicPrint(signs.INFO + " Found words on webpages. Creating similar words for: " + colorWord(str(word),0))
             similar_dict = self.api.words(rel_trg=word, max=return_nr)
             species_dict = self.api.words(rel_spc=word, max=return_nr)
             for word in similar_dict:
