@@ -72,7 +72,8 @@ if (isurl is not None):
 		generator = WebListGenerator(sys.argv[1], 5, 12)
 		manipulator = WordlistManipulator(generator.GetList(max_results), True)
 		createWordlist(manipulator, "advanced")
-
+	else:
+		printHelp()
 elif (isurl is None):
 	# If it's just a regular keyword
 	wordlist.append(keyword)
@@ -84,6 +85,5 @@ elif (isurl is None):
 		createWordlist(manipulator, "normal")
 	elif (sys.argv[2] == '--advanced'):
 		createWordlist(manipulator, "advanced")
-
-else:
-	printHelp()
+	else:
+		printHelp()
