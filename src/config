@@ -1,5 +1,6 @@
 suffixes: _!?#
 prefixes: !@_~
 max_spider_results: 8
-max_spider_word_length: 4
+min_spider_word_length: 5
 max_spider_word_length: 15
+only_spider_subdomains: True

@@ -46,8 +46,6 @@ class WordlistManipulator:
         # the entire wordlist, but work based on keywords (like wordCloner).
         self.configuration = StandardFunc.readConfigFile()
         self.keywords = keywords
-        if (len(keywords) > 1):
-            print("\n")
         string = signs.INFO + " keyword(s) : "
         num_keywords = len(keywords)
 
