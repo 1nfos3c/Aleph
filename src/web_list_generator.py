@@ -2,19 +2,25 @@
 from bs4 import BeautifulSoup
 from collections import Counter
 import urllib.request
+import ssl
 import re
 from standard_functions import *
 from wordlist_manipulation import *
 
 class WebListGenerator():
 
-    def __init__(self, url, minwordlength, maxwordlength):
+    def __init__(self, url, minwordlength, maxwordlength, strictssl):
         #Simple webspider that creates a list of all unique words in a given webpage.
         self.url = url
         self.minwordlength = minwordlength
         self.maxwordlength = maxwordlength
-        self.configuration = StandardFunc.readConfigFile()
-        html = urllib.request.urlopen(self.url).read()
+        self.strictssl = strictssl
+        if strictssl:
+            html = urllib.request.urlopen(self.url).read()
+        else:
+            ctx = ssl.SSLContext()
+            ctx.verify_mode = ssl.CERT_NONE
+            html = urllib.request.urlopen(self.url, context=ctx).read()
         soup = BeautifulSoup(html, features='lxml')
         self.URLlist = [self.url]
         subUrlList = self.FindSubUrls(soup)
@@ -43,7 +49,12 @@ class WebListGenerator():
 
     def read_web_page(self, url):
         #returns a list of all words on a given webpage
-        html = urllib.request.urlopen(url).read()
+        if self.strictssl:
+            html = urllib.request.urlopen(url).read()
+        else:
+            ctx = ssl.SSLContext()
+            ctx.verify_mode = ssl.CERT_NONE
+            html = urllib.request.urlopen(self.url, context=ctx).read()
         soup = BeautifulSoup(html, features='lxml')
         for script in soup(["script", "style"]):
             script.extract()

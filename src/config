@@ -1,5 +1,7 @@
 suffixes: _!?#
 prefixes: !@_~
 max_spider_results: 8
+min_spider_word_length: 3
 max_spider_word_length: 4
 max_spider_word_length: 15
+strict_ssl: True
