@@ -13,6 +13,7 @@ class WebListGenerator():
         self.url = url
         self.minwordlength = minwordlength
         self.maxwordlength = maxwordlength
+        self.configuration = StandardFunc.readConfigFile()
         html = urllib.request.urlopen(self.url).read()
         soup = BeautifulSoup(html, features='lxml')
         self.URLlist = [self.url]
