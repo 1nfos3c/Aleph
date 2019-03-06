@@ -28,18 +28,40 @@ printBanner()
 
 def printHelp():
 	# Prints out the help info
-	print(signs.HELP + " Usage : python {} ".format(colorWord(sys.argv[0], 0))+ "<" + colorWord("keyword", 0)+ "> " + colorWord("--simple", 0) + "/" + colorWord("--normal", 0) + "/" + colorWord("--advanced", 0) )
-  # [h] Usage : python Aleph.py <keyword> --simple/--normal/--advanced
+	print(signs.HELP + " Usage : python {} ".format(colorWord(sys.argv[0], 0))+ "<" + colorWord("keyword", 0)+ "> " + colorWord("  --simple", 0) + "/" + "\n\t\t\t\t\t" + colorWord("--normal", 0) + "/" +  "\n\t\t\t\t\t" + colorWord("--advanced", 0) + "/" +  "\n\t\t\t\t\t" + colorWord("--all", 0) )
+    # [h] Usage : python Aleph.py <keyword> --simple/--normal/--advanced/-all
+
+def appendWordlist(new_list, list):
+	for item in list:
+		new_list.append(item)
 
 def createWordlist(manipulator, mode):
 	# Creates the wordlist
 	if (mode == "simple"):
-		manipulator.simpleManipulation()
+		manipulator.simpleManipulation(do_write = True)
 	elif (mode == "normal"):
-		manipulator.normalManipulation()
+		manipulator.normalManipulation(do_write = True)
 	elif (mode == "advanced"):
-		manipulator.advancedManipulation()
-
+		manipulator.advancedManipulation(do_write = True)
+	elif (mode == "all"):
+		StandardFunc.dynamicPrint(signs.INFO + " Creating simple passwords.")
+		list_simple = manipulator.simpleManipulation(do_write = False)
+		StandardFunc.dynamicPrint(signs.INFO + " Creating normal passwords.")
+		list_normal = manipulator.normalManipulation(do_write = False)
+		StandardFunc.dynamicPrint(signs.INFO + " Creating advanced passwords.")
+		list_advanced = manipulator.advancedManipulation(do_write = False)
+		StandardFunc.dynamicPrint(signs.INFO + " Merging passwords")
+		if ((list_simple != None) and (list_normal != None) and (list_advanced != None)):
+			# Created all wordlists succesfully
+			# the lists will now be merged and then written to disk.
+			wordlists = []
+			appendWordlist(wordlists, list_simple)
+			appendWordlist(wordlists, list_normal)
+			appendWordlist(wordlists, list_advanced)
+			manipulator.writeAll(wordlists)
+		else:
+			print("Serious error, this is not supposed to happen at all!")
+			exit(0)
 
 if (len(sys.argv) < 3): # 2 Arguments required, word/url and mode (script name treated as argument 0)
 	printHelp()
@@ -82,6 +104,10 @@ if (is_url is not None):
 		generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)
 		manipulator = WordlistManipulator(generator.GetList(max_results), True)
 		createWordlist(manipulator, "advanced")
+	elif (sys.argv[2] == '--all'):
+		generator = WebListGenerator(keyword, min_word_length, max_word_length, strict_ssl)
+		manipulator = WordlistManipulator(generator.GetList(max_results), True)
+		createWordlist(manipulator, "all")
 	else:
 		printHelp()
 elif (is_url is None):
@@ -96,5 +122,7 @@ elif (is_url is None):
 		createWordlist(manipulator, "normal")
 	elif (sys.argv[2] == '--advanced'):
 		createWordlist(manipulator, "advanced")
+	elif (sys.argv[2] == '--all'):
+		createWordlist(manipulator, "all")
 	else:
 		printHelp()

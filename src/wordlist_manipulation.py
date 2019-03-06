@@ -70,18 +70,22 @@ class WordlistManipulator:
             wordlist.append(self.keywords[x])
         return wordlist
 
-    def simpleManipulation(self):
+    def simpleManipulation(self, do_write):
         # Called when simple mode is used
         wordlist = self.fillWordlist()
-        wordlist = self.addZeroToTen(wordlist)
+        wordlist = self.addZeroToNinetynine(wordlist)
         wordlist = self.addSpecialChars(wordlist, "simple")
         wordlist = self.capitalizeWordlist(wordlist)
         #wordlist = self.leetify(wordlist, "simple")
         wordlist = self.wordCloner(wordlist, "simple")
         wordlist = self.sortOnLength(wordlist)
-        self.writeWordlist(wordlist, "simple")
+        if(do_write == True):
+            self.writeWordlist(wordlist, "simple")
+            return None
+        else:
+            return wordlist
 
-    def normalManipulation(self):
+    def normalManipulation(self, do_write):
         # Called when normal mode is used
         wordlist = self.fillWordlist()
         wordlist = self.addSpecialChars(wordlist, "normal")
@@ -90,9 +94,13 @@ class WordlistManipulator:
         wordlist = self.appendYears(wordlist, "normal", self.number_lengths["normal"])
         wordlist = self.wordCloner(wordlist, "normal")
         wordlist = self.sortOnLength(wordlist)
-        self.writeWordlist(wordlist, "normal")
+        if(do_write == True):
+            self.writeWordlist(wordlist, "normal")
+            return None
+        else:
+            return wordlist
 
-    def advancedManipulation(self):
+    def advancedManipulation(self, do_write):
         # Called when advanced mode is used
         wordlist = self.fillWordlist()
         wordlist = self.addSpecialChars(wordlist, "advanced")
@@ -101,7 +109,16 @@ class WordlistManipulator:
         wordlist = self.appendYears(wordlist, "advanced", self.number_lengths["advanced"])
         wordlist = self.wordCloner(wordlist, "advanced")
         wordlist = self.sortOnLength(wordlist)
-        self.writeWordlist(wordlist, "advanced")
+        if(do_write == True):
+            self.writeWordlist(wordlist, "advanced")
+            return None
+        else:
+            return wordlist
+
+    def writeAll(self, wordlists):
+        # Writes all created wordlists to a single file.
+        self.writeWordlist(wordlists, "all")
+
 
     def capitalizeWordlist(self, wordlist):
         # Makes interesting combinations of uppercase and lowercase letters.
@@ -120,13 +137,13 @@ class WordlistManipulator:
             wordlist.append(wordlist[w].upper())
         return wordlist
 
-    def addZeroToTen(self, wordlist):
-        # Adds zero to ten to the keyword(s)
-        # Coffee -> Coffee7
+    def addZeroToNinetynine(self, wordlist):
+        # Adds zero to 99 to the keyword(s)
+        # Coffee -> Coffee21
         StandardFunc.dynamicPrint(signs.PLUS + " Adding zero to ten.")
 
         for x in range(0,len(wordlist)):
-            for i in range(0,10):
+            for i in range(0,100):
                 wordlist.append(wordlist[x] + str(i))
         return wordlist
 
@@ -160,7 +177,7 @@ class WordlistManipulator:
             # and add the years.
 
             # We will need to avoid looping the words twice, but we do want
-            # to add a capitalized version when needed, watch and learn.
+            # to add a capitalized version when needed, watch this.
             new_words_written = 0 # <--- !
             for x in range(0, len(self.keywords)):
                 if not (self.keywords[x].istitle()):
@@ -169,7 +186,7 @@ class WordlistManipulator:
                         wordlist.append(keyword + str(i))
                         new_words_written += 1 # <--- !!
 
-            for x in range(0, (len(wordlist) - new_words_written)): # <---- !!! whut?!
+            for x in range(0, (len(wordlist) - new_words_written)): # <---- !!!
                 for i in range(year_min, self.cur_year):
                     wordlist.append(wordlist[x] + str(i))
         else :
