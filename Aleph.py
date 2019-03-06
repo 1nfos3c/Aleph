@@ -8,6 +8,7 @@ src_path = os.getcwd() + '/src' # Path = Current Directory/src
 sys.path.insert(0, src_path)
 from web_list_generator import *
 from wordlist_manipulation import * # Import code from src/wordlist_manipulation.py
+from standard_functions import *
 
 def colorWord(word, color):
 	# Gives a word a nice color!
@@ -52,12 +53,13 @@ if (len(keywrds) > 1): # This tool isn't meant for multiple keywords.
 
 wordlist = []
 keyword = keyword.replace(" ", "")
+configuration = StandardFunc.readConfigFile()
 
 isurl = re.search(r'https?://', keyword) # Checking if user input is a URL
 if (isurl is not None):
 	# If it indeed is a URL the WebListGenerator will spider for keywords which
 	# are then manipulated by the WordlistManipulator.
-	max_results = int(StandardFunc.readFile()[2])
+	max_results = int(configuration['max_spider_results'])
 	if (sys.argv[2] == '--simple'):
 		generator = WebListGenerator(sys.argv[1], 5, 12)
 		manipulator = WordlistManipulator(generator.GetList(max_results), True)
